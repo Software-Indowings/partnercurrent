@@ -1,11 +1,17 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { login, logout, selectUser } from '../../features/userSlice';
 import { BsFillBellFill, BsFillEnvelopeFill, BsPersonCircle, BsSearch, BsJustify } from 'react-icons/bs';
 
-function Header({ openSidebar, username }) { // Receive username as a prop
+function Header({ openSidebar, username }) { 
   const navigate = useNavigate();
-
-  const handleLogout = () => {
+  const dispatch = useDispatch();
+  
+  const user = useSelector(selectUser);
+  const handleLogout = (e) => {
+    e.preventDefault();
+    dispatch(logout());
     navigate('/');
   };
 
@@ -33,8 +39,8 @@ function Header({ openSidebar, username }) { // Receive username as a prop
         <BsJustify className='icon' onClick={openSidebar} />
       </div>
       <div className='header-left'>
-        Welcome {username}
-      </div>
+          Welcome {user && user.username ? user.username : 'Guest'}
+        </div>
       <div className='header-right'>
         <button
           style={buttonStyle}

@@ -6,16 +6,16 @@ function Store() {
   const [userCategory, setUserCategory] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:8081/')
+    axios.get('http://localhost:3307/')
       .then(res => {
         if (res.data.length > 0) {
-          setUserCategory(res.data[0].category);
+          setUserCategory(res.data[1].category);
           
         }
       })
       .catch(err => console.log(err));
 
-    axios.get('http://localhost:8081/products_create/')
+    axios.get('http://localhost:3307/products_create/')
       .then(res => {
         if (res.data.length > 0) {
           const productsWithCount = res.data.map(product => ({ ...product, count: 0 }));

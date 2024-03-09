@@ -17,7 +17,7 @@ function Update_products(props) {
     });
 
     useEffect(() => {
-        axios.get(`http://localhost:8081/read_products/${product_id}`)
+        axios.get(`http://localhost:3307/read_products/${product_id}`)
             .then(res => {
                 if (res.data && res.data.length > 0) {
                     const { name, brochure, stock, retail_price, partner_price, category } = res.data[0];
@@ -29,7 +29,7 @@ function Update_products(props) {
 
     const handleUpdate = (event) => {
         event.preventDefault();
-        axios.put(`http://localhost:8081/update_products/${product_id}`, values)
+        axios.put(`http://localhost:3307/update_products/${product_id}`, values)
             .then(res => {
                 console.log(res);
                 navigate('/products');

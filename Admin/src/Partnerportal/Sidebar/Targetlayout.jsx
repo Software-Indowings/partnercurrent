@@ -3,6 +3,9 @@ import Sidebar from '../Layout/Sidebar';
 import Target from './Target';
 import { Outlet } from 'react-router-dom';
 import Navbar from '../Layout/Navbar';
+import { connect } from 'react-redux'; 
+import { setUsername } from '/src/redux/actions';
+
 
 function Targetlayout(props) {
     const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
@@ -19,7 +22,7 @@ function Targetlayout(props) {
     return (
       <div>
         <div className='grid-container'>
-          <Navbar openSidebar={openSidebar} />
+          <Navbar openSidebar={openSidebar}  username={props.username} />
           <Outlet/>
           <Sidebar open={openSidebarToggle} changeContentComponent={changeContentComponent} />
           {contentComponent}
@@ -27,7 +30,14 @@ function Targetlayout(props) {
       </div>
     );
 }
+ 
+const mapStateToProps = (state) => ({
+  username: state.username,
+});
 
-export default Targetlayout;
+const mapDispatchToProps = {
+  setUsername,
+};
 
+export default connect(mapStateToProps, mapDispatchToProps)(Targetlayout);
 

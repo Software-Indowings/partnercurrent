@@ -17,7 +17,7 @@ function Update(props) {
     const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
-        axios.get(`http://localhost:8081/read/${id}`)
+        axios.get(`http://localhost:3307/read/${id}`)
             .then(res => {
                 if (res.data && res.data.length > 0) {
                     const { username, password, category, commission } = res.data[0]; 
@@ -29,7 +29,7 @@ function Update(props) {
 
     const handleUpdate = (event) => {
         event.preventDefault();
-        axios.put(`http://localhost:8081/update/${id}`, values)
+        axios.put(`http://localhost:3307/update/${id}`, values)
             .then(res => {
                 console.log(res);
                 navigate('/addpartner');

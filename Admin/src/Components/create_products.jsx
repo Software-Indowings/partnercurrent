@@ -17,7 +17,7 @@ function Create_Products() {
     
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:8081/products/', values)
+        axios.post('http://localhost:3307/products/', values)
             .then(res => {
                 console.log(res);
                 navigate('/products')

@@ -8,7 +8,7 @@ function AddPartner() {
   const [isHovering, setIsHovering] = useState(false);
 
   useEffect(() => {
-    axios.get('http://ls-b120627a54c35ec7aa532f95056b0e3ba1d5b806.cx8km2ky23qf.ap-south-1.rds.amazonaws.com/')
+    axios.get('http://localhost:3307/')
       .then(res => {
         if (res.data.length > 0) {
           setPartners(res.data);
@@ -18,7 +18,7 @@ function AddPartner() {
   }, []);
 
   const handleDelete = (id) => {
-    axios.delete(`http://ls-b120627a54c35ec7aa532f95056b0e3ba1d5b806.cx8km2ky23qf.ap-south-1.rds.amazonaws.com/delete/${id}`)
+    axios.delete(`http://localhost:3307/delete/${id}`)
       .then(res => {
         setPartners(partners.filter(partner => partner.id !== id));
       })

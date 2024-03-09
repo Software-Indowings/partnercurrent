@@ -9,7 +9,7 @@ function ReadProducts(props) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`http://localhost:8081/read_products/${product_id}`)
+        axios.get(`http://localhost:3307/read_products/${product_id}`)
             .then(res => {
                 console.log(res);
                 setProduct(res.data[0]);
@@ -18,7 +18,7 @@ function ReadProducts(props) {
     }, [product_id]);
 
     const handleDelete = (product_id) => {
-        axios.delete(`http://localhost:8081/delete_products/${product_id}`)
+        axios.delete(`http://localhost:3307/delete_products/${product_id}`)
             .then(res => {
                 navigate('/products');
             })

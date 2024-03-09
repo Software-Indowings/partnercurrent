@@ -7,7 +7,7 @@ function Products(props) {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8081/products_create/')
+    axios.get('http://localhost:3307/products_create/')
       .then(res => {
         if (res.data.length > 0) {
           setData(res.data);
@@ -17,7 +17,7 @@ function Products(props) {
   }, []);
 
   const handleDelete = (product_id) => {
-    axios.delete('http://localhost:8081/delete_products/' + product_id)
+    axios.delete('http://localhost:3307/delete_products/' + product_id)
       .then(res => {
         location.reload();
       })

@@ -14,19 +14,19 @@ app.use(express.json());
 //     database: 'partnerportal',
 // });
 
-const connection = mysql.createConnection({
+const db = mysql.createConnection({
     host: 'ls-b120627a54c35ec7aa532f95056b0e3ba1d5b806.cx8km2ky23qf.ap-south-1.rds.amazonaws.com',
     user: 'dbmasteruser',
     password: 'IndoWings',
     database: 'partnerportal'
   });
   
-  connection.connect((err) => {
+  db.connect((err) => {
     if (err) {
       console.error('Error connecting to MySQL database: ', err.stack);
       return;
     }
-    console.log('Connected to MySQL database as id ' + connection.threadId);
+    console.log('Connected to MySQL database as id ' + db.threadId);
   });
 
 // Login Partner
@@ -194,6 +194,6 @@ app.delete('/delete_products/:product_id',(req,res)=>{
 })
 
 
-app.listen(8081, () => {
+app.listen(3307, () => {
     console.log("Listening: server is live");
 });

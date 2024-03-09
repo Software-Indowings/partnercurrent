@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import Login from "./Login";
 import AdminPage from "./AdminPage";
-import { Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 import Addpartner from "./Components/Addpartner";
 import Products from "./Components/products";
@@ -40,10 +39,39 @@ import Support from "./Partnerportal/Sidebar/Support";
 import Supportlayout from "./Partnerportal/Sidebar/Supportlayout";
 
 
+// const router= createBrowserRouter([
+//   {
+//     path:"/layout",
+//     element:<Layout/>,
+//     children:[
+//       {
+//         path: "/docs",
+//         element: <Docs />
+//       },
+//       {
+//         path: "/announce",
+//         element: <Announce />
+//       },
+//       {
+//         path: "/info",
+//         element: <Info />
+//       },
+//       {
+//         path: "/order",
+//         element: <Order />
+//       },
+//       {
+//         path: "/store",
+//         element: <Store />
+//       },
+//     ]
+//   }
+// ])
+
 function App() {
 
   return (
-  
+  // <RouterProvider router={router}/>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Loginpartner />} />
