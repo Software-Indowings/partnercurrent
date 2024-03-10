@@ -41,6 +41,7 @@ app.post('/login', async (req, res) => {
         console.log(user.username);
         console.log(user.password);
         console.log(user.category);
+        console.log(user.commission);
         if (err) {
             return res.status(500).json({ message: 'Error in server' });
         }
@@ -53,7 +54,7 @@ app.post('/login', async (req, res) => {
         if (!isValidPassword) {
             return res.status(401).json({ message: 'Invalid username or password' });
         }
-        return res.status(200).json({ message: 'Login successful', username: user.username });
+        return res.status(200).json({ message: 'Login successful', username: user.username ,password : user.password, category: user.category, commission : user.commission});
     });
 });
 

@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
-import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 import { useNavigate } from "react-router-dom";
-import logo from './images/4.png';
+import { useDispatch } from "react-redux";
+import { adminLogout } from "./features/userSlice";
+import logo from "./images/4.png";
 
 function AdminPage() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
@@ -15,8 +18,7 @@ function AdminPage() {
   }, []);
 
   const handleLogout = () => {
-    localStorage.setItem("isLoggedIn", false);
-    localStorage.setItem("id", "");
+    dispatch(adminLogout());
     navigate("/admin");
   };
 
@@ -55,12 +57,12 @@ function AdminPage() {
   };
 
   const handleHover = (event) => {
-    event.target.style.background = "#Ef7f1a"; 
-    event.target.style.color = "orange"; 
+    event.target.style.background = "#Ef7f1a";
+    event.target.style.color = "orange";
   };
 
   const handleHoverOut = (event) => {
-    event.target.style.background = "rgba(255, 255, 255, 0.8)"; 
+    event.target.style.background = "rgba(255, 255, 255, 0.8)";
     event.target.style.color = "black";
   };
 
@@ -73,14 +75,24 @@ function AdminPage() {
             Logout
           </Button>
         </div>
-        <div className="buttons" style={{ display: "flex", justifyContent: "center", alignItems: "center", flexWrap: "wrap" }}>
+        <div
+          className="buttons"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexWrap: "wrap",
+          }}
+        >
           <Card
             style={cardStyle}
             onMouseEnter={handleHover}
             onMouseLeave={handleHoverOut}
             onClick={() => navigate("/addpartner")}
           >
-            <CardContent style={{...textStyle, color: 'black'}}>Add Partner</CardContent>
+            <CardContent style={{ ...textStyle, color: "black" }}>
+              Add Partner
+            </CardContent>
           </Card>
           <Card
             style={cardStyle}
@@ -88,7 +100,9 @@ function AdminPage() {
             onMouseLeave={handleHoverOut}
             onClick={() => navigate("/products")}
           >
-            <CardContent style={{...textStyle, color: 'black'}}>Products</CardContent>
+            <CardContent style={{ ...textStyle, color: "black" }}>
+              Products
+            </CardContent>
           </Card>
           <Card
             style={cardStyle}
@@ -96,7 +110,9 @@ function AdminPage() {
             onMouseLeave={handleHoverOut}
             onClick={() => navigate("/invoices")}
           >
-            <CardContent style={{...textStyle, color: 'black'}}>Invoices</CardContent>
+            <CardContent style={{ ...textStyle, color: "black" }}>
+              Invoices
+            </CardContent>
           </Card>
           <Card
             style={cardStyle}
@@ -104,7 +120,9 @@ function AdminPage() {
             onMouseLeave={handleHoverOut}
             onClick={() => navigate("/managepartner")}
           >
-            <CardContent style={{...textStyle, color: 'black'}}>Manage Partner</CardContent>
+            <CardContent style={{ ...textStyle, color: "black" }}>
+              Manage Partner
+            </CardContent>
           </Card>
           <Card
             style={cardStyle}
@@ -112,7 +130,9 @@ function AdminPage() {
             onMouseLeave={handleHoverOut}
             onClick={() => navigate("/orders")}
           >
-            <CardContent style={{...textStyle, color: 'black'}}>Orders</CardContent>
+            <CardContent style={{ ...textStyle, color: "black" }}>
+              Orders
+            </CardContent>
           </Card>
           <Card
             style={cardStyle}
@@ -120,9 +140,10 @@ function AdminPage() {
             onMouseLeave={handleHoverOut}
             onClick={() => navigate("/targets")}
           >
-            <CardContent style={{...textStyle, color: 'black'}}>Targets</CardContent>
+            <CardContent style={{ ...textStyle, color: "black" }}>
+              Targets
+            </CardContent>
           </Card>
-          
         </div>
       </div>
     </div>

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import Home from './Layout/Home';
-import Sidebar from './Layout/Sidebar';
-import Navbar from './Layout/Navbar'; // Import Navbar component
-import { Outlet } from 'react-router-dom';
-import { connect } from 'react-redux'; // Import connect
-import { setUsername } from '/src/redux/actions';
+import React, { useState, useEffect } from "react";
+import Home from "./Layout/Home";
+import Sidebar from "./Layout/Sidebar";
+import Navbar from "./Layout/Navbar"; // Import Navbar component
+import { Outlet } from "react-router-dom";
+import { connect } from "react-redux"; // Import connect
+import { setUsername } from "/src/redux/actions";
 
 function Layout(props) {
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
@@ -14,16 +14,16 @@ function Layout(props) {
     setOpenSidebarToggle(!openSidebarToggle);
   };
 
-  const changeContentComponent = (component) => {
-    setContentComponent(component);
-  };
-
   return (
     <div>
-      <div className='grid-container'>
-        <Navbar openSidebar={openSidebar} username={props.username} /> {/* Pass username as a prop */}
+      <div className="grid-container">
+        <Navbar openSidebar={openSidebar} username={props.username} />{" "}
+        {/* Pass username as a prop */}
         <Outlet />
-        <Sidebar open={openSidebarToggle} changeContentComponent={changeContentComponent} />
+        <Sidebar
+          open={openSidebarToggle}
+          setContentComponent={setContentComponent}
+        />
         {contentComponent}
       </div>
     </div>

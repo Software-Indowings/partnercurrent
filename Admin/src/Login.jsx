@@ -1,37 +1,46 @@
 import React, { useState } from "react";
 import AdminPage from "./AdminPage";
 import { useNavigate } from "react-router-dom";
-import backgroundImage from './images/3.png'; // Adjust the path and file name as per your project structure
-import logo from './images/partner.png'; // Adjust the path and file name as per your project structure
+import { useSelector, useDispatch } from "react-redux";
+import { adminLogin, adminLogout } from "../src/features/userSlice";
+import backgroundImage from "./images/3.png";
+import logo from "./images/partner.png";
 
 function Login(props) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLoginSuccess = (id) => {
-    localStorage.setItem("isLoggedIn", true);
-    localStorage.setItem("id", id);
+    dispatch(
+      adminLogin({
+        username: "root",
+        password: "root",
+      })
+    );
+    // localStorage.setItem("isLoggedIn", true);
+    // localStorage.setItem("id", id);
     navigate("/adminPage");
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (id === "root" && password === "root") {
+  const handleSubmit = (user, pass) => {
+    // event.preventDefault();
+    if (user === "root" && pass === "root") {
       handleLoginSuccess(id);
     } else {
       alert("Invalid ID or password");
     }
   };
 
-  if (localStorage.getItem("isLoggedIn") === "true") {
-    return (
-      <AdminPage
-        onLogout={props.onLoginSuccess}
-        id={localStorage.getItem("id")}
-      />
-    );
-  }
+  // if (i === "root" && pass === "root") {
+  //   return (
+  //     <AdminPage
+  //     // onLogout={props.onLoginSuccess}
+  //     // id={localStorage.getItem("id")}
+  //     />
+  //   );
+  // }
 
   return (
     <div
@@ -48,7 +57,6 @@ function Login(props) {
       }}
     >
       <form
-        onSubmit={handleSubmit}
         style={{
           width: "300px",
           padding: "20px",
@@ -57,12 +65,29 @@ function Login(props) {
           backgroundColor: "#fff",
         }}
       >
-         <div style={{ display: "flex", justifyContent: "center" }}>
-          <img src={logo} alt="Logo" style={{ width: "150px", marginBottom: "20px" }} />
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <img
+            src={logo}
+            alt="Logo"
+            style={{ width: "150px", marginBottom: "20px" }}
+          />
         </div>
-        <h2 style={{ textAlign: "center", marginBottom: "20px", fontSize: "24px", color: "#000" }}>Admin Login</h2>
+        <h2
+          style={{
+            textAlign: "center",
+            marginBottom: "20px",
+            fontSize: "24px",
+            color: "#000",
+          }}
+        >
+          Admin Login
+        </h2>
         <div style={{ marginBottom: "15px" }}>
-          <label style={{ display: "block", marginBottom: "5px", color: "#000" }}>ID:</label>
+          <label
+            style={{ display: "block", marginBottom: "5px", color: "#000" }}
+          >
+            ID:
+          </label>
           <input
             type="text"
             value={id}
@@ -76,7 +101,9 @@ function Login(props) {
           />
         </div>
         <div style={{ marginBottom: "20px" }}>
-          <label style={{ display: "block", marginBottom: "5px", color: "#000" }}>
+          <label
+            style={{ display: "block", marginBottom: "5px", color: "#000" }}
+          >
             Password:
           </label>
           <input
@@ -102,8 +129,9 @@ function Login(props) {
             color: "#fff",
             cursor: "pointer",
           }}
+          onClick={() => handleSubmit(id, password)}
         >
-           Login
+          Login
         </button>
       </form>
     </div>
