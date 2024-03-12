@@ -108,7 +108,7 @@ function LoginPartner() {
                     color: "black",
                   }}
                 >
-                  Welcome, {loginStatus === "success" && credentials.username}!
+                  Welcome Partner!
                 </h1>
                 {loginStatus === "success" && (
                   <p

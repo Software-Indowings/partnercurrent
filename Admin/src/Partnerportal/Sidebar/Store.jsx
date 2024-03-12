@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+import { login, logout, selectUser } from '../../features/userSlice';
 
-function Store() {
+function Store({username}) {
   const [productsData, setProductsData] = useState([]);
   const [userCategory, setUserCategory] = useState('');
+  const [userCommission, setUserCommission] = useState('');
+  const user = useSelector(selectUser);
 
   useEffect(() => {
-    axios.get('http://localhost:3307/')
-      .then(res => {
-        if (res.data.length > 0) {
-          setUserCategory(res.data[1].category);
-          
-        }
-      })
-      .catch(err => console.log(err));
 
+    setUserCategory(user.category);
+    setUserCommission(user.commission);
+    
     axios.get('http://localhost:3307/products_create/')
       .then(res => {
         if (res.data.length > 0) {
@@ -40,8 +39,10 @@ function Store() {
   };
 
   const calculateSubtotal = (index) => {
-    return productsData[index].partner_price * productsData[index].count;
+    const partnerPrice = productsData[index].retail_price * (100 - user.commission) / 100;
+    return partnerPrice * productsData[index].count;
   };
+  
 
   const calculateTotalCost = () => {
     return productsData.reduce((total, product) => {
@@ -104,15 +105,15 @@ function Store() {
 
   return (
     <div style={containerStyle}>
-      <h1 style={{ color: '#191b30' }}>Partner Store</h1>
+      <h1 style={{ color: '#191b30' }}>Partner Store - { user.category } </h1>
       <table style={tableStyle}>
         <thead>
           <tr>
             <th style={thStyle}>Product Name</th>
             <th style={thStyle}>Brochure</th>
             <th style={thStyle}>Stock</th>
-            <th style={thStyle}>Suggested Retail Price</th>
-            <th style={thStyle}>Partner Price</th>
+            <th style={thStyle}>Retail Price</th>
+            <th style={thStyle}>Partner Price-({user.commission})</th>
             <th style={thStyle}>Category</th>
             <th style={thStyle}>Action</th>
             <th style={thStyle}>Subtotal</th>
@@ -124,10 +125,10 @@ function Store() {
             return (
               <tr key={product.product_id}>
                 <td style={tdStyle}>{product.name}</td>
-                <td style={tdStyle}>{product.brochure}</td>
+                <td style={tdStyle}>xyz</td>
                 <td style={tdStyle}>{product.stock}</td>
                 <td style={tdStyle}>{product.retail_price}</td>
-                <td style={tdStyle}>{product.partner_price}</td>
+                <td style={tdStyle}>{product.retail_price * (100 - user.commission) / 100}</td>
                 <td style={tdStyle}>{product.category}</td>
                 <td style={tdStyle}>
                   <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -139,8 +140,25 @@ function Store() {
                 <td style={tdStyle}>{calculateSubtotal(index)}</td>
               </tr>
             );
-          } else {
-            return null;
+          } else if ( userCategory === "All"){
+            return (
+              <tr key={product.product_id}>
+                <td style={tdStyle}>{product.name}</td>
+                <td style={tdStyle}>xyz</td>
+                <td style={tdStyle}>{product.stock}</td>
+                <td style={tdStyle}>{product.retail_price}</td>
+                <td style={tdStyle}>{product.retail_price * (100 - user.commission) / 100}</td>
+                <td style={tdStyle}>{product.category}</td>
+                <td style={tdStyle}>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <div style={countBoxStyle}>{product.count}</div>
+                    <button style={buttonStyle} onClick={() => decrementCount(index)}>-</button>
+                    <button style={buttonStyle} onClick={() => incrementCount(index)}>+</button>
+                  </div>
+                </td>
+                <td style={tdStyle}>{calculateSubtotal(index)}</td>
+              </tr>
+            ); 
           }
         })}
         </tbody>

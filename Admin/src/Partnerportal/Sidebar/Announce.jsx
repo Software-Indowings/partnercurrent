@@ -1,34 +1,100 @@
-import React from 'react';
-
-const announcementData = {
-  title: 'New Cloud Products: FAQs',
-  content: [
-    {
-      question: 'How can I get a Pix4Dcloud Advanced trial license?',
-      answer: 'There is no specific Pix4Dcloud trial; it is included in the standard Pix4Dmapper trial license. An existing user or someone with a confirmed Pix4D account can have a Pix4Dcloud Advanced trial when they log in using their existing Pix4D account and they click on Start Free trial button. Users without an existing Pix4D account need to go to Pix4Dcloud and they will land on the demo page. They click on the "Start Free Trial" button and click on sign up. They will get an email to confirm the account. Once the account is confirmed, the trial will be created and the user can log in and use the software right away. For internal demo and marketing licenses, please contact laura.lees@pix4d.com.'
-    },
-    {
-      question: 'How many images and projects does Allowance for Pix4Dcloud and Pix4Dcloud Advanced rentals (EXTRA-CLOUD-10K) include?',
-      answer: 'EXTRA-CLOUD-10K includes 10 000 images and 80 projects.'
-    },
-    {
-      question: 'Can we sell only Pix4Dcloud and Pix4Dcloud Advanced rentals (EXTRA-CLOUD-10K) or do we need first to sell Pix4Dcloud or Pix4Dcloud Advanced?',
-      answer: 'Not specified in the provided context.'
-    }
-  ]
-};
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 
 function Announce() {
+  const [announcements, setAnnouncements] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3307/announce/")
+      .then((res) => {
+        if (res.data.length > 0) {
+          setAnnouncements(res.data);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  const containerStyle = {
+    margin: "30px",
+  };
+
+  const tableStyle = {
+    borderCollapse: "collapse",
+    width: "1500px",
+    margin: "auto",
+    backgroundColor: "#f5f5f5",
+  };
+
+  const thStyle = {
+    backgroundColor: "#191b30",
+    color: "white",
+    textAlign: "left",
+    padding: "29px",
+    border: "1px solid #dddddd",
+  };
+
+  const tdStyle = {
+    textAlign: "left",
+    padding: "20px",
+    border: "1px solid #dddddd",
+  };
+
+  const buttonStyle = {
+    padding: "8px 12px",
+    fontSize: "16px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    border: "none",
+    borderRadius: "4px",
+    backgroundColor: "#4CAF50",
+    color: "white",
+    marginRight: "4px",
+  };
+
+  const countBoxStyle = {
+    display: "inline-block",
+    padding: "4px 8px",
+    border: "1px solid #ccc",
+    borderRadius: "4px",
+    marginRight: "8px",
+  };
+
+  const totalCostStyle = {
+    display: "inline-block",
+    padding: "8px 12px",
+    backgroundColor: "red",
+    color: "white",
+    borderRadius: "4px",
+  };
+
   return (
-    <div style={{ maxWidth: '600px', margin: '0 auto', padding: '2rem' }}>
-      <img src={announcementData.image} alt={announcementData.imageAlt} style={{ width: '100%', marginBottom: '1rem' }} />
-      <h1 style={{ marginTop: 0 }}>{announcementData.title}</h1>
-      {announcementData.content.map((section, index) => (
-        <div key={index}>
-          <h2>{section.question}</h2>
-          <p>{section.answer}</p>
-        </div>
-      ))}
+    <div style={containerStyle}>
+      {/* <h1 style={{ color: '#191b30' }}> Announcements </h1> */}
+      <table style={tableStyle}>
+        <thead>
+          <tr>
+            <th style={thStyle}>
+              <h2>Announcements</h2>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {announcements.map((announcements, index) => {
+            return (
+              <tr key={announcements.announce_id}>
+                <td style={tdStyle}>
+                <MdOutlineKeyboardArrowRight />
+                  <b>{announcements.heading}</b>
+                  <br />
+                  {announcements.description}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 }

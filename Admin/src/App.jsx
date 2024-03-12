@@ -19,6 +19,10 @@ import Read_products from "./Components/Read_products";
 import Update_products from "./Components/Update_products";
 import Invoices from "./Components/Invoices";
 import Managepartner from "./Components/Managepartner";
+import Announcements from "./Components/Announcements/Announcements";
+import Create_announcement from "./Components/Announcements/Create_announcement";
+import Read_announcement from "./Components/Announcements/Read_announcement";
+import Update_announcement from "./Components/Announcements/Update_announcement";
 import Orders from "./Components/Orders";
 import Targets from "./Components/Targets";
 import Create from "./Components/Create";
@@ -37,38 +41,10 @@ import Info from "./Partnerportal/Sidebar/Info";
 import Docs from "./Partnerportal/Sidebar/Docs";
 import Announce from "./Partnerportal/Sidebar/Announce";
 import Support from "./Partnerportal/Sidebar/Support";
-
+import Test from "./Partnerportal/Layout/Test";
 import ProtectedRoute from "../utils/ProtectedRoute";
 import AdminProtectedRoute from "../utils/AdminProtectedRoute";
 
-// const router= createBrowserRouter([
-//   {
-//     path:"/layout",
-//     element:<Layout/>,
-//     children:[
-//       {
-//         path: "/docs",
-//         element: <Docs />
-//       },
-//       {
-//         path: "/announce",
-//         element: <Announce />
-//       },
-//       {
-//         path: "/info",
-//         element: <Info />
-//       },
-//       {
-//         path: "/order",
-//         element: <Order />
-//       },
-//       {
-//         path: "/store",
-//         element: <Store />
-//       },
-//     ]
-//   }
-// ])
 
 function App() {
   return (
@@ -166,6 +142,7 @@ function App() {
           }
         />
         <Route path="/sidebar" element={<Sidebar />} />
+        <Route path="/test" element={<Test />} />
         <Route path="/navbar" element={<Navbar />} />
         <Route path="/home" element={<Home />} />
         <Route path="/target" element={<Target />} />
@@ -201,12 +178,65 @@ function App() {
             </AdminProtectedRoute>
           }
         />
+        <Route
+          path="/announcements"
+          element={
+            <AdminProtectedRoute>
+              <Announcements />
+            </AdminProtectedRoute>
+          }
+        />
+        <Route
+          path="/create_announcement"
+          element={
+            <AdminProtectedRoute>
+              <Create_announcement />
+            </AdminProtectedRoute>
+          }
+        />
+        <Route
+          path="/read_announcement/:announce_id"
+          element={
+            <AdminProtectedRoute>
+              <Read_announcement />
+            </AdminProtectedRoute>
+          }
+        />
+        <Route
+          path="/update_announcement/:announce_id"
+          element={
+            <AdminProtectedRoute>
+              <Update_announcement />
+            </AdminProtectedRoute>
+          }
+        />
+        
       </Routes>
     </BrowserRouter>
   );
 }
 
 export default App;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // import React, { useState } from "react";
 // import Login from "./Login";

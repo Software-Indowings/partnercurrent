@@ -194,6 +194,56 @@ app.delete('/delete_products/:product_id',(req,res)=>{
     })
 })
 
+//Announcements Handling
+
+app.get('/announce', (req, res) => {
+    const sql = 'SELECT * FROM announcements';
+    db.query(sql,(err,result)=>{
+        if(err) return res.json({Message: "Error in server"});
+        return res.json(result);
+        
+    })
+});
+
+app.post('/create_announcement', (req, res) => {
+    const sql = "INSERT INTO announcements (`heading`, `description`) VALUES (?)";
+    console.log(req.body)
+    const values = [
+        req.body.heading,
+        req.body.description
+    ]
+    db.query(sql,[values], (err,result) => {
+        if(err) return res.json(err);
+        return res.json(result);
+    })
+});
+
+app.get('/read_announcement/:announce_id', (req, res) => {
+    const sql = 'SELECT * FROM announcements WHERE announce_id =?';
+    const id = req.params.announce_id;
+    db.query(sql,[id],(err,result)=>{
+        if(err) return res.json({Message: "Error in server"});
+        return res.json(result);
+    })
+});
+
+app.put('/update_announcement/:announce_id', (req, res) => {
+    const sql = 'UPDATE announcements SET `heading`=?, `description`=? WHERE announce_id =?';
+    const id = req.params.announce_id;
+    db.query(sql,[req.body.heading, req.body.description, id], (err,result)=>{
+        if(err) return res.json({Message: "Error in server"});
+        return res.json(result);
+    })
+});
+
+app.delete('/delete_announcement/:announce_id',(req,res)=>{
+    const sql = 'DELETE FROM announcements WHERE announce_id =?';
+    const id = req.params.announce_id;
+    db.query(sql,[id], (err,result)=>{
+        if(err) return res.json({Message: "Error in server"});
+        return res.json(result);
+    })
+})
 
 app.listen(3307, () => {
     console.log("Listening: server is live");

@@ -30,6 +30,7 @@ import Docs from "../Sidebar/Docs";
 import Announce from "../Sidebar/Announce";
 import { Link } from "react-router-dom";
 import Support from "../Sidebar/Support";
+import Test from "./Test";
 
 const Sidebar = ({ open, openSidebar, setContentComponent }) => {
   const handleLinkClick = (event) => {
@@ -37,7 +38,7 @@ const Sidebar = ({ open, openSidebar, setContentComponent }) => {
   };
 
   return (
-    <aside id="sidebar" className={open ? "sidebar-responsive" : ""}>
+    <aside id="sidebar" className={open ? "sidebar-responsive" : ""} style={{ color: '#ffffff' }}>
       <div className="sidebar-title">
         <div className="sidebar-brand">
           <a href="https://www.indowings.com/" target="_blank">
@@ -46,14 +47,10 @@ const Sidebar = ({ open, openSidebar, setContentComponent }) => {
         </div>
       </div>
       <ul className="sidebar-list">
-        <li
-          className="sidebar-list-item"
-          onClick={() => {
-            handleLinkClick(<Home />);
-          }}
-        >
-          Partner Portal
-        </li>
+      <li className="sidebar-list-item" style={{ fontWeight: 'bold' }}>
+  Partner Portal
+</li>
+
         <li
           className="sidebar-list-item"
           onClick={() => {

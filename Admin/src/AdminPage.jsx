@@ -144,6 +144,16 @@ function AdminPage() {
               Targets
             </CardContent>
           </Card>
+          <Card
+            style={cardStyle}
+            onMouseEnter={handleHover}
+            onMouseLeave={handleHoverOut}
+            onClick={() => navigate("/announcements")}
+          >
+            <CardContent style={{ ...textStyle, color: "black" }}>
+              Announcements
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
