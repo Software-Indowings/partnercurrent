@@ -4,28 +4,30 @@ export const userSlice = createSlice({
     name: "user",
     initialState:{
         user : null,
-        admin: null
+        admin: null,
+        checkout: null
     },
     reducers:{
         login:(state,action)=>{
-            // login   
             state.user = action.payload;
         },
         logout:(state) =>{
             state.user =null;
         },
         adminLogin:(state,action)=>{
-            // login   
             state.admin = action.payload;
         },
         adminLogout:(state) =>{
             state.admin =null;
         },
+        cart:(state) =>{
+            state.checkout = action.payload;
+        }
     
     },
 });
 
-export const {login, logout, adminLogin, adminLogout} = userSlice.actions;
+export const {login, logout, adminLogin, adminLogout, cart} = userSlice.actions;
 
 export const selectUser = (state) =>state.user.user;
 

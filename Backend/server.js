@@ -118,7 +118,6 @@ app.get('/products_create', (req, res) => {
     db.query(sql,(err,result)=>{
         if(err) return res.json({Message: "Error in server"});
         return res.json(result);
-        
     })
 });
 
@@ -244,6 +243,100 @@ app.delete('/delete_announcement/:announce_id',(req,res)=>{
         return res.json(result);
     })
 })
+
+//Partner Profile Handling
+
+app.get('/allpartnersprofile', (req, res) => {
+    const sql = 'SELECT * FROM partners_profile';
+    db.query(sql,(err,result)=>{
+        if(err) return res.json({Message: "Error in server"});
+        return res.json(result);
+    })
+});
+
+app.get('/read_profile/:profile_id', (req, res) => {
+    const sql = 'SELECT * FROM partners_profile WHERE profile_id =?';
+    const id = req.params.profile_id;
+    db.query(sql,[id],(err,result)=>{
+        if(err) return res.json({Message: "Error in server"});
+        return res.json(result);
+    })
+});
+app.delete('/delete_profile/:profile_id',(req,res)=>{
+    const sql = 'DELETE FROM partners_profile WHERE profile_id =?';
+    const id = req.params.profile_id;
+    db.query(sql,[id], (err,result)=>{
+        if(err) return res.json({Message: "Error in server"});
+        return res.json(result);
+    })
+})
+
+app.post('/profile_insert', (req, res) => {
+    const reg_email = req.body.reg_email;
+    const sqlSelect = "SELECT * FROM partners_profile WHERE reg_email = ?";
+    db.query(sqlSelect, [reg_email], (err, result) => {
+        if (err) {
+            return res.json(err);
+        }
+
+        if (result.length > 0) {
+            // If the user with reg_email already exists, perform an update
+            const sqlUpdate = "UPDATE partners_profile SET legal_name = ?, trading_name = ?, partner_tier = ?, founding_date = ?, website = ?, vat_number = ?, employees = ?, address = ?, reg_phone = ?, key_name = ?, key_email = ?, key_phone = ?, key_position = ?, industries = ?, comments = ? WHERE reg_email = ?";
+            const values = [
+                req.body.legal_name,
+                req.body.trading_name,
+                req.body.partner_tier,
+                req.body.founding_date,
+                req.body.website,
+                req.body.vat_number,
+                req.body.address,
+                req.body.reg_phone,
+                req.body.employees,
+                req.body.key_name,
+                req.body.key_email,
+                req.body.key_phone,
+                req.body.key_position,
+                req.body.industries,
+                req.body.comments,
+                reg_email
+            ];
+            db.query(sqlUpdate, values, (err, result) => {
+                if (err) {
+                    return res.json(err);
+                }
+                return res.json({ message: "Profile updated successfully." });
+            });
+        } else {
+            // If the user with reg_email doesn't exist, perform an insert
+            const sqlInsert = "INSERT INTO partners_profile (`legal_name`, `trading_name`, `partner_tier`, `founding_date`, `website`, `vat_number`, `employees`, `address`, `reg_phone`, `key_name`, `key_email`, `key_phone`, `key_position`, `industries`, `comments`, `reg_email`) VALUES (?)";
+            const values = [
+                req.body.legal_name,
+                req.body.trading_name,
+                req.body.partner_tier,
+                req.body.founding_date,
+                req.body.website,
+                req.body.vat_number,
+                req.body.address,
+                req.body.reg_phone,
+                req.body.employees,
+                req.body.key_name,
+                req.body.key_email,
+                req.body.key_phone,
+                req.body.key_position,
+                req.body.industries,
+                req.body.comments,
+                reg_email
+            ];
+            db.query(sqlInsert, [values], (err, result) => {
+                if (err) {
+                    return res.json(err);
+                }
+                return res.json({ message: "Profile inserted successfully." });
+            });
+        }
+    });
+});
+
 
 app.listen(3307, () => {
     console.log("Listening: server is live");

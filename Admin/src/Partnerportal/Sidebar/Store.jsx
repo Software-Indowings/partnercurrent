@@ -115,7 +115,7 @@ function Store({username}) {
             <th style={thStyle}>Retail Price</th>
             <th style={thStyle}>Partner Price-({user.commission})</th>
             <th style={thStyle}>Category</th>
-            <th style={thStyle}>Action</th>
+            <th style={thStyle}>Quantity</th>
             <th style={thStyle}>Subtotal</th>
           </tr>
         </thead>
@@ -125,7 +125,7 @@ function Store({username}) {
             return (
               <tr key={product.product_id}>
                 <td style={tdStyle}>{product.name}</td>
-                <td style={tdStyle}>xyz</td>
+                <td style={tdStyle}><a href={product.brochure} target="_blank" rel="noopener noreferrer">View Brochure</a></td>
                 <td style={tdStyle}>{product.stock}</td>
                 <td style={tdStyle}>{product.retail_price}</td>
                 <td style={tdStyle}>{product.retail_price * (100 - user.commission) / 100}</td>
@@ -144,7 +144,7 @@ function Store({username}) {
             return (
               <tr key={product.product_id}>
                 <td style={tdStyle}>{product.name}</td>
-                <td style={tdStyle}>xyz</td>
+                <td style={tdStyle}><a href={product.brochure} target="_blank" rel="noopener noreferrer">View Brochure</a></td>
                 <td style={tdStyle}>{product.stock}</td>
                 <td style={tdStyle}>{product.retail_price}</td>
                 <td style={tdStyle}>{product.retail_price * (100 - user.commission) / 100}</td>

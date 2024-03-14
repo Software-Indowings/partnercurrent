@@ -118,10 +118,10 @@ function AdminPage() {
             style={cardStyle}
             onMouseEnter={handleHover}
             onMouseLeave={handleHoverOut}
-            onClick={() => navigate("/managepartner")}
+            onClick={() => navigate("/admin_profile")}
           >
             <CardContent style={{ ...textStyle, color: "black" }}>
-              Manage Partner
+              Partner Profile
             </CardContent>
           </Card>
           <Card

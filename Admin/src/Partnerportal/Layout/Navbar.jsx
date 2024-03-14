@@ -5,7 +5,6 @@ import { logout, selectUser } from "../../features/userSlice";
 import { BsJustify } from "react-icons/bs";
 import { IoPersonSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import Profile from "../Sidebar/Profile";
 
 function Header({ openSidebar }) {
   const navigate = useNavigate();
@@ -76,11 +75,11 @@ function Header({ openSidebar }) {
                 cursor: "pointer",
                 transition: "background-color 0.3s ease",
                 display: "flex",
-                alignItems: "center", // Center the icon and text vertically
+                alignItems: "center",
               }}
               onClick={() => setShowDropdown(!showDropdown)}
             >
-              <IoPersonSharp className="icon" style={{ marginRight: "5px" }} /> {/* Add icon */}
+              <IoPersonSharp className="icon" style={{ marginRight: "5px" }} />
               Profile
             </button>
             {showDropdown && (
@@ -111,7 +110,12 @@ function Header({ openSidebar }) {
                       e.target.style.backgroundColor = "#ffffff";
                     }}
                   >
-                    <Link to="/profile" style={{ textDecoration: "none", color: "black" }}>View Profile</Link>
+                    <Link
+                      to="/partnerprofile"
+                      style={{ textDecoration: "none", color: "black" }}
+                    >
+                      Profile
+                    </Link>
                   </li>
                   <li
                     style={{

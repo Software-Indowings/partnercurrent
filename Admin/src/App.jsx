@@ -44,7 +44,10 @@ import Support from "./Partnerportal/Sidebar/Support";
 import Test from "./Partnerportal/Layout/Test";
 import ProtectedRoute from "../utils/ProtectedRoute";
 import AdminProtectedRoute from "../utils/AdminProtectedRoute";
-
+import PartnerProfile from "./Partnerportal/Profile/PartnerProfile";
+import Update_profile from "./Partnerportal/Profile/Update_profile";
+import Admin_profile from "./Partnerportal/Profile/Admin_profile";
+import ReadProfile from "./Partnerportal/Profile/Admin_readprofile";
 
 function App() {
   return (
@@ -141,6 +144,38 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/partnerprofile"
+          element={
+            <ProtectedRoute>
+              <PartnerProfile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/update_profile"
+          element={
+            <ProtectedRoute>
+              <Update_profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin_profile"
+          element={
+            <AdminProtectedRoute>
+              <Admin_profile />
+            </AdminProtectedRoute>
+          }
+        />
+        <Route
+          path="/read_profile/:profile_id"
+          element={
+            <AdminProtectedRoute>
+              <ReadProfile />
+            </AdminProtectedRoute>
+          }
+        />
         <Route path="/sidebar" element={<Sidebar />} />
         <Route path="/test" element={<Test />} />
         <Route path="/navbar" element={<Navbar />} />
@@ -210,33 +245,12 @@ function App() {
             </AdminProtectedRoute>
           }
         />
-        
       </Routes>
     </BrowserRouter>
   );
 }
 
 export default App;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import React, { useState } from "react";
 // import Login from "./Login";
