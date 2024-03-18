@@ -1,38 +1,94 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../features/userSlice";
 
 function Info() {
   const containerStyle = {
-    margin: '30px',
+    margin: "30px",
   };
 
-  const pStyle = {
-    padding: '20px',
+  const tableStyle = {
+    borderCollapse: "collapse",
+    width: "1500px",
+    margin: "auto",
+    backgroundColor: "#f5f5f5",
   };
 
-  // Legal information
-  const legalInfo = [
-    'Cloud Terms of Sale: Link available on pix4d.com homepage',
-    'Educational - Declaration of Use form: Link available on pix4d.com homepage',
-    'Privacy Policy: Link available on pix4d.com homepage',
-    'Software EULA: Link available on pix4d.com homepage',
-    'Terms of Sale: Link available on pix4d.com homepage',
-    'COMPLEMENTARY TERMS: These terms are provided in the Partner Portal under the General Info tab and apply to Pix4D partners',
-  ];
+  const thStyle = {
+    backgroundColor: "#191b30",
+    color: "white",
+    textAlign: "left",
+    padding: "29px",
+    border: "1px solid #dddddd",
+  };
 
-  // Complementary Terms
-  const complementaryTerms = [
-    'Section 3.1 (a) (i) and (ii): Please refer to the Partner Portal Partner Store tab for a list of all Licensed Products covered by the Legal information',
-  ];
+  const [info, setInfo] = useState([]);
+  const user = useSelector(selectUser);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3307/legal-info`)
+      .then((res) => {
+        setInfo(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <div style={containerStyle}>
-      <h1 style={{ color: '#191b30' }}>Legal Information</h1>
-      {legalInfo.map((item, index) => (
-        <p key={index} style={pStyle}>{item}</p>
-      ))}
-      {complementaryTerms.map((item, index) => (
-        <p key={index + legalInfo.length} style={pStyle}>{item}</p>
-      ))}
+      <table style={tableStyle}>
+        <thead>
+          <tr>
+            <th style={thStyle}>
+              <h2>Legal Information</h2>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <div className="d-flex flex-column vh-200 justify-content-center align-items-center">
+            <div className="w-75 bg-white rounded p-5">
+              {/* <h3 className="mb-4">Partner Profile</h3> */}
+              {/* <div className='d-flex justify-content-end mb-4'>
+                  <Link to="/update_profile" className='btn btn-success'> Update Profile</Link>
+              </div> */}
+              {info.map((legal_info, index) => {
+                if (legal_info.info_email === user.username) {
+                  return (
+                    <table className="table table-bordered" key={index}>
+                      <tbody>
+                        <tr>
+                          <th>Registered E-mail:</th>
+                          <td>
+                            {user && user.username ? user.username : "Guest"}
+                          </td>
+                        </tr>
+                        <tr>
+                          <th>Document:</th>
+                          <td>
+                            {info.document ? (
+                              <button
+                                onClick={() =>
+                                  openDocumentInNewWindow(info.document)
+                                }
+                              >
+                                Open Document
+                              </button>
+                            ) : (
+                              "No document available"
+                            )}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  );
+                }
+                return null;
+              })}
+            </div>
+          </div>
+        </tbody>
+      </table>
     </div>
   );
 }

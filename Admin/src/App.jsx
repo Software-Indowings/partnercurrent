@@ -48,6 +48,8 @@ import PartnerProfile from "./Partnerportal/Profile/PartnerProfile";
 import Update_profile from "./Partnerportal/Profile/Update_profile";
 import Admin_profile from "./Partnerportal/Profile/Admin_profile";
 import ReadProfile from "./Partnerportal/Profile/Admin_readprofile";
+import LegalInfo from "./Components/LegalInfo/LegalInfo";
+import Create_Info from "./Components/LegalInfo/Create_Info";
 
 function App() {
   return (
@@ -173,6 +175,22 @@ function App() {
           element={
             <AdminProtectedRoute>
               <ReadProfile />
+            </AdminProtectedRoute>
+          }
+        />
+        <Route
+          path="/legalinfo"
+          element={
+            <AdminProtectedRoute>
+              <LegalInfo />
+            </AdminProtectedRoute>
+          }
+        />
+        <Route
+          path="/createinfo"
+          element={
+            <AdminProtectedRoute>
+              <Create_Info />
             </AdminProtectedRoute>
           }
         />

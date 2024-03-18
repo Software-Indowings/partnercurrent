@@ -2,9 +2,13 @@ import express from 'express';
 import mysql from 'mysql';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
+import bodyParser from 'body-parser';
+import fs from 'fs';
+import multer from 'multer';
 
 const app = express();
 app.use(cors());
+app.use(bodyParser.json());
 app.use(express.json());
 
 // const db = mysql.createConnection({
@@ -337,6 +341,176 @@ app.post('/profile_insert', (req, res) => {
     });
 });
 
+// Legal Info
+
+
+// Assuming you have a route to retrieve the document data
+app.get('/get-document/:id', (req, res) => {
+  const { id } = req.params;
+
+  // Query the database to retrieve the document data
+  // Example:
+  db.query('SELECT document FROM legal_info WHERE info_id = ?', id, (err, results) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error fetching document');
+    } else {
+      // Assuming the document is stored as a file path in the database
+      const filePath = results[0].document;
+
+      // Read the file asynchronously
+      fs.readFile(filePath, (err, data) => {
+        if (err) {
+          console.error(err);
+          res.status(500).send('Error reading document');
+        } else {
+          // Convert the file data to a base64-encoded string
+          const base64Data = data.toString('base64');
+          const pdfContent = `data:application/pdf;base64,${base64Data}`;
+          res.send(pdfContent);
+        }
+      });
+    }
+  });
+});
+
+// Initialize multer with the storage configuration
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads'); // Define the destination folder for uploaded files
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname); // Keep the original filename
+  }
+});
+
+const upload = multer({ storage: storage });
+
+// Handle file upload and create legal info
+app.post('/create-info', upload.single('document'), (req, res) => {
+  const { info_email } = req.body;
+  const documentPath = req.file.path; // Get the path of the uploaded file
+
+  const INSERT_INFO_QUERY = `INSERT INTO legal_info (info_email, document) VALUES (?, ?)`;
+  db.query(INSERT_INFO_QUERY, [info_email, documentPath], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error creating legal info');
+    } else {
+      res.status(201).send('Legal info created successfully');
+    }
+  });
+});
+
+// Serve uploaded files statically
+app.use('/uploads', express.static('uploads'));
+
+// Get All Legal Info
+app.get('/legal-info', (req, res) => {
+  const SELECT_ALL_INFO_QUERY = 'SELECT * FROM legal_info';
+  db.query(SELECT_ALL_INFO_QUERY, (err, results) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error fetching legal info');
+    } else {
+      res.status(200).json(results);
+    }
+  });
+});
+
+
+//Target Handling
+
+// Route to insert target data
+app.post('/api/targets', (req, res) => {
+    const { target_email, target_amount, month, year } = req.body;
+    const query = 'INSERT INTO targets (target_email, target_amount, month, year) VALUES (?, ?, ?, ?)';
+    db.query(query, [target_email, target_amount, month, year], (err, result) => {
+      if (err) {
+        console.error('Error inserting target data:', err);
+        res.status(500).send('Error inserting target data');
+      } else {
+        console.log('Target data inserted successfully');
+        res.status(200).send('Target data inserted successfully');
+      }
+    });
+  });
+  
+  // Route to fetch target data
+  app.get('/api/targets/:email/:year/:month', (req, res) => {
+    const { email, year, month } = req.params;
+    const query = 'SELECT * FROM targets WHERE target_email = ? AND year = ? AND month = ?';
+    db.query(query, [email, year, month], (err, result) => {
+      if (err) {
+        console.error('Error fetching target data:', err);
+        res.status(500).send('Error fetching target data');
+      } else {
+        console.log('Target data fetched successfully');
+        res.status(200).json(result);
+      }
+    });
+  });
+
+  //Orders Handling
+
+  
+// app.get('/allorders', (req, res) => {
+//     const sql = 'SELECT * FROM orders';
+//     db.query(sql,(err,result)=>{
+//         if(err) return res.json({Message: "Error in server"});
+//         return res.json(result);
+//     })
+// });
+app.get('/allorders', (req, res) => {
+  db.query('SELECT * FROM orders', (error, results, fields) => {
+    if (error) {
+      console.error('Error fetching orders:', error);
+      return res.status(500).json({ error: 'An error occurred while fetching orders' });
+    }
+    console.log('Results:', results); 
+    const orders = results.map(row => {
+      row.product = JSON.parse(row.product);
+      return row;
+    });
+    const ordersJSON = JSON.stringify(orders); // Convert orders array to JSON string
+    res.setHeader('Content-Type', 'application/json');
+    res.send(ordersJSON); // Send the JSON string as response
+  });
+});
+
+
+
+app.post('/orders', (req, res) => {
+    const { order_email, order_date, order_status, product, total_price } = req.body;
+  
+    // Convert product data to JSON string before storing in the database
+    const productData = JSON.stringify(product);
+  
+    const sql = `INSERT INTO orders (order_email, order_date, order_status, product, total_price) VALUES (?, ?, ?, ?, ?)`;
+  
+    db.query(sql, [order_email, order_date, order_status, productData, total_price], (err, result) => {
+      if (err) {
+        console.error('Error placing order:', err);
+        return res.status(500).json({ error: 'Error placing order. Please try again later.' });
+      }
+      console.log('Order placed successfully:', result.insertId);
+      res.status(201).json({ message: 'Order placed successfully!', orderId: result.insertId });
+    });
+  });
+  
+//   // Delete Legal Info by ID
+//   app.delete('/legal-info/:id', (req, res) => {
+//     const { id } = req.params;
+//     const DELETE_INFO_QUERY = 'DELETE FROM legal_info WHERE info_id = ?';
+//     db.query(DELETE_INFO_QUERY, [id], (err, result) => {
+//       if (err) {
+//         console.error(err);
+//         res.status(500).send('Error deleting legal info');
+//       } else {
+//         res.status(200).send('Legal info deleted successfully');
+//       }
+//     });
+//   });
 
 app.listen(3307, () => {
     console.log("Listening: server is live");

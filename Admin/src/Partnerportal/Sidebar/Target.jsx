@@ -1,44 +1,60 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useSelector } from "react-redux";
+import { selectUser } from "../../features/userSlice";
 
 function Target() {
-  const dummyData = [
-    {
-      year: '2024',
-      quarter: 'Q1',
-      from: 'January 1, 2024',
-      to: 'March 31, 2024',
-      target: '5000',
-      sales: '4500',
-      targetAchieved: '90%',
-    },
-    {
-      year: '2024',
-      quarter: 'Q2',
-      from: 'April 1, 2024',
-      to: 'June 30, 2024',
-      target: '5500',
-      sales: '5200',
-      targetAchieved: '94.5%',
-    },
-    {
-      year: '2024',
-      quarter: 'Q3',
-      from: 'July 1, 2024',
-      to: 'September 30, 2024',
-      target: '6000',
-      sales: '5700',
-      targetAchieved: '95%',
-    },
-    {
-      year: '2024',
-      quarter: 'Q4',
-      from: 'October 1, 2024',
-      to: 'December 31, 2024',
-      target: '6500',
-      sales: '6200',
-      targetAchieved: '95.4%',
-    },
-  ];
+  const currentYear = new Date().getFullYear();
+  const [selectedYear, setSelectedYear] = useState(currentYear);
+  const [targets, setTargets] = useState([]);
+  const user = useSelector(selectUser);
+  
+  useEffect(() => {
+    fetchTargets(selectedYear);
+  }, [selectedYear]);
+
+  const handleYearChange = (event) => {
+    setSelectedYear(parseInt(event.target.value));
+  };
+
+  const fetchTargets = async (year) => {
+    try {
+      const response = await axios.get(`/api/targets/${year}`);
+      setTargets(response.data || []); 
+    } catch (error) {
+      console.error('Error fetching targets:', error);
+    }
+  };
+
+  const generateQuarterlyData = () => {
+    const quarters = [];
+
+    for (let quarter = 1; quarter <= 4; quarter++) {
+      const quarterStartMonth = (quarter - 1) * 3 + 1;
+      const quarterEndMonth = quarter * 3;
+      const months = [];
+      for (let month = quarterStartMonth; month <= quarterEndMonth; month++) {
+        const monthStartDate = new Date(selectedYear, month - 1, 1);
+        const monthEndDate = new Date(selectedYear, month, 0);
+        const targetData = Array.isArray(targets) ? targets.find(target => target.month === month && target.year === selectedYear) : null;
+        months.push({
+          month: monthStartDate.toLocaleDateString('en-US', { month: 'long' }),
+          from: monthStartDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+          to: monthEndDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+          target: targetData ? targetData.target_amount : '', // Display target amount if available
+          sales: '', // Add your logic to retrieve sales data for each month
+          targetAchieved: '', // Add your logic to calculate % target achieved for each month
+        });
+        
+      }
+      quarters.push({
+        quarter: 'Q' + quarter,
+        months: months,
+      });
+    }
+
+    return quarters;
+  };
 
   const containerStyle = {
     margin: '30px',
@@ -55,24 +71,32 @@ function Target() {
     backgroundColor: '#191b30',
     color: 'white',
     textAlign: 'left',
-    padding: '29px',
+    padding: '10px',
     border: '1px solid #dddddd',
   };
 
   const tdStyle = {
     textAlign: 'left',
-    padding: '20px',
+    padding: '10px',
     border: '1px solid #dddddd',
   };
 
   return (
     <div style={containerStyle}>
       <h1 style={{ color: '#191b30' }}>Sales</h1>
+      <select value={selectedYear} onChange={handleYearChange}>
+        {Array.from({ length: currentYear - 2010 }, (_, index) => (
+          <option key={index} value={currentYear - index}>
+            {currentYear - index}
+          </option>
+        ))}
+      </select>
       <table style={tableStyle}>
         <thead>
           <tr>
             <th style={thStyle}>Year</th>
             <th style={thStyle}>Quarter</th>
+            <th style={thStyle}>Month</th>
             <th style={thStyle}>From</th>
             <th style={thStyle}>To</th>
             <th style={thStyle}>Target</th>
@@ -81,17 +105,20 @@ function Target() {
           </tr>
         </thead>
         <tbody>
-          {dummyData.map((data, index) => (
-            <tr key={index}>
-              <td style={tdStyle}>{data.year}</td>
-              <td style={tdStyle}>{data.quarter}</td>
-              <td style={tdStyle}>{data.from}</td>
-              <td style={tdStyle}>{data.to}</td>
-              <td style={tdStyle}>{data.target}</td>
-              <td style={tdStyle}>{data.sales}</td>
-              <td style={tdStyle}>{data.targetAchieved}</td>
-            </tr>
-          ))}
+          {generateQuarterlyData().map((quarterData, quarterIndex) =>
+            quarterData.months.map((monthData, monthIndex) => (
+              <tr key={`${quarterIndex}-${monthIndex}`}>
+                <td style={tdStyle}>{selectedYear}</td>
+                <td style={tdStyle}>{quarterData.quarter}</td>
+                <td style={tdStyle}>{monthData.month}</td>
+                <td style={tdStyle}>{monthData.from}</td>
+                <td style={tdStyle}>{monthData.to}</td>
+                <td style={tdStyle}>{monthData.target_amount}</td>
+                <td style={tdStyle}>{monthData.sales}</td>
+                <td style={tdStyle}>{monthData.targetAchieved}</td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>

@@ -9,30 +9,31 @@ function Update_profile(props) {
   const navigate = useNavigate();
   const user = useSelector(selectUser);
   const [values, setValues] = useState({
-    legal_name: '',
-    trading_name: '',
-    partner_tier: '',
-    founding_date: '',
-    website: '',
-    vat_number: '',
-    employees: '',
-    address: '',
-    reg_phone: '',
-    key_name: '',
-    key_email: '',
-    key_phone: '',
-    key_position: '',
-    industries: '',
-    comments: '',
-    reg_email:''
+    legal_name: "",
+    trading_name: "",
+    partner_tier: "",
+    founding_date: "",
+    website: "",
+    vat_number: "",
+    employees: "",
+    address: "",
+    reg_phone: "",
+    key_name: "",
+    key_email: "",
+    key_phone: "",
+    key_position: "",
+    industries: "",
+    comments: "",
+    reg_email: "",
   });
 
   useEffect(() => {
-    axios.get(`http://localhost:3307/allpartnersprofile`)
-      .then(res => {
+    axios
+      .get(`http://localhost:3307/allpartnersprofile`)
+      .then((res) => {
         setProfile(res.data);
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
@@ -45,7 +46,9 @@ function Update_profile(props) {
   }, [user]);
 
   useEffect(() => {
-    const existingProfile = profile.find(partner => partner.reg_email === user.username);
+    const existingProfile = profile.find(
+      (partner) => partner.reg_email === user.username
+    );
     if (existingProfile) {
       setValues(existingProfile);
     }
@@ -66,75 +69,188 @@ function Update_profile(props) {
     <div className="d-flex flex-column vh-200 justify-content-center align-items-center">
       <div className="w-75 bg-white rounded p-5">
         <h2 className="mb-4">Update Profile:</h2>
-        
+
         <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '20px' }}>
+          <div style={{ marginBottom: "20px" }}>
             <label htmlFor="">Registered E-mail:</label>
-            <input type="text" className='form-control' value={values.reg_email} disabled />
+            <input
+              type="text"
+              className="form-control"
+              value={values.reg_email}
+              disabled
+            />
           </div>
-          <div style={{ marginBottom: '20px' }}>
+          <div style={{ marginBottom: "20px" }}>
             <label htmlFor="">Partner Name(Legal): </label>
-            <input type="text" className='form-control' value={values.legal_name} onChange={e => setValues({ ...values, legal_name: e.target.value })} />
+            <input
+              type="text"
+              className="form-control"
+              value={values.legal_name}
+              onChange={(e) =>
+                setValues({ ...values, legal_name: e.target.value })
+              }
+            />
           </div>
-          <div style={{ marginBottom: '20px' }}>
+          <div style={{ marginBottom: "20px" }}>
             <label htmlFor="">Partner Name(Trading):</label>
-            <input type="text" className='form-control' value={values.trading_name} onChange={e => setValues({ ...values, trading_name: e.target.value })} />
+            <input
+              type="text"
+              className="form-control"
+              value={values.trading_name}
+              onChange={(e) =>
+                setValues({ ...values, trading_name: e.target.value })
+              }
+            />
           </div>
-          <div style={{ marginBottom: '20px' }}>
+          <div style={{ marginBottom: "20px" }}>
             <label htmlFor="">Partner Tier:</label>
-            <input type="text" className='form-control' value={values.partner_tier} onChange={e => setValues({ ...values, partner_tier: e.target.value })} />
+            <input
+              type="text"
+              className="form-control"
+              value={values.partner_tier}
+              onChange={(e) =>
+                setValues({ ...values, partner_tier: e.target.value })
+              }
+            />
           </div>
-          <div style={{ marginBottom: '20px' }}>
+          <div style={{ marginBottom: "20px" }}>
             <label htmlFor="">Company founding date:</label>
-            <input type="text" className='form-control' value={values.founding_date} onChange={e => setValues({ ...values, founding_date: e.target.value })} />
+            <input
+              type="text"
+              className="form-control"
+              value={values.founding_date}
+              onChange={(e) =>
+                setValues({ ...values, founding_date: e.target.value })
+              }
+            />
           </div>
-          <div style={{ marginBottom: '20px' }}>
+          <div style={{ marginBottom: "20px" }}>
             <label htmlFor="">Company website:</label>
-            <input type="text" className='form-control' value={values.website} onChange={e => setValues({ ...values, website: e.target.value })} />
+            <input
+              type="text"
+              className="form-control"
+              value={values.website}
+              onChange={(e) =>
+                setValues({ ...values, website: e.target.value })
+              }
+            />
           </div>
-          <div style={{ marginBottom: '20px' }}>
+          <div style={{ marginBottom: "20px" }}>
             <label htmlFor="">VAT Number:</label>
-            <input type="text" className='form-control' value={values.vat_number} onChange={e => setValues({ ...values, vat_number: e.target.value })} />
+            <input
+              type="text"
+              className="form-control"
+              value={values.vat_number}
+              onChange={(e) =>
+                setValues({ ...values, vat_number: e.target.value })
+              }
+            />
           </div>
-          <div style={{ marginBottom: '20px' }}>
+          <div style={{ marginBottom: "20px" }}>
             <label htmlFor="">Total Number of Employees:</label>
-            <input type="text" className='form-control' value={values.employees} onChange={e => setValues({ ...values, employees: e.target.value })} />
+            <input
+              type="text"
+              className="form-control"
+              value={values.employees}
+              onChange={(e) =>
+                setValues({ ...values, employees: e.target.value })
+              }
+            />
           </div>
-          <div style={{ marginBottom: '20px' }}>
+          <div style={{ marginBottom: "20px" }}>
             <label htmlFor="">Registered Address:</label>
-            <input type="text" className='form-control' value={values.address} onChange={e => setValues({ ...values, address: e.target.value })} />
+            <input
+              type="text"
+              className="form-control"
+              value={values.address}
+              onChange={(e) =>
+                setValues({ ...values, address: e.target.value })
+              }
+            />
           </div>
-          <div style={{ marginBottom: '20px' }}>
+          <div style={{ marginBottom: "20px" }}>
             <label htmlFor="">Registered Phone:</label>
-            <input type="text" className='form-control' value={values.reg_phone} onChange={e => setValues({ ...values, reg_phone: e.target.value })} />
+            <input
+              type="text"
+              className="form-control"
+              value={values.reg_phone}
+              onChange={(e) =>
+                setValues({ ...values, reg_phone: e.target.value })
+              }
+            />
           </div>
-          <div style={{ marginBottom: '20px' }}>
-            <strong>Key Contacts-</strong><br/>
+          <div style={{ marginBottom: "20px" }}>
+            <strong>Key Contacts-</strong>
+            <br />
             <label htmlFor="">Name:</label>
-            <input type="text" className='form-control' value={values.key_name} onChange={e => setValues({ ...values, key_name: e.target.value })} />
+            <input
+              type="text"
+              className="form-control"
+              value={values.key_name}
+              onChange={(e) =>
+                setValues({ ...values, key_name: e.target.value })
+              }
+            />
             <br />
             <label htmlFor="">Email:</label>
-            <input type="text" className='form-control' value={values.key_email} onChange={e => setValues({ ...values, key_email: e.target.value })} />
+            <input
+              type="text"
+              className="form-control"
+              value={values.key_email}
+              onChange={(e) =>
+                setValues({ ...values, key_email: e.target.value })
+              }
+            />
             <br />
             <label htmlFor="">Phone:</label>
-            <input type="text" className='form-control' value={values.key_phone} onChange={e => setValues({ ...values, key_phone: e.target.value })} />
+            <input
+              type="text"
+              className="form-control"
+              value={values.key_phone}
+              onChange={(e) =>
+                setValues({ ...values, key_phone: e.target.value })
+              }
+            />
             <br />
             <label htmlFor="">Position/Dept:</label>
-            <input type="text" className='form-control' value={values.key_position} onChange={e => setValues({ ...values, key_position: e.target.value })} />
+            <input
+              type="text"
+              className="form-control"
+              value={values.key_position}
+              onChange={(e) =>
+                setValues({ ...values, key_position: e.target.value })
+              }
+            />
           </div>
-          <div style={{ marginBottom: '20px' }}>
+          <div style={{ marginBottom: "20px" }}>
             <label htmlFor="">Focus Industries:</label>
-            <input type="text" className='form-control' value={values.industries} onChange={e => setValues({ ...values, industries: e.target.value })} />
+            <input
+              type="text"
+              className="form-control"
+              value={values.industries}
+              onChange={(e) =>
+                setValues({ ...values, industries: e.target.value })
+              }
+            />
           </div>
-          <div style={{ marginBottom: '20px' }}>
+          <div style={{ marginBottom: "20px" }}>
             <label htmlFor="">Focus Comments:</label>
-            <input type="text" className='form-control' value={values.comments} onChange={e => setValues({ ...values, comments: e.target.value })} />
+            <input
+              type="text"
+              className="form-control"
+              value={values.comments}
+              onChange={(e) =>
+                setValues({ ...values, comments: e.target.value })
+              }
+            />
           </div>
           <div className="mt-4">
             <Link to="/partnerprofile" className="btn btn-primary me-2">
               Back
             </Link>
-            <button type="submit" className="btn btn-success">Save Changes</button>
+            <button type="submit" className="btn btn-success">
+              Save Changes
+            </button>
           </div>
         </form>
       </div>
