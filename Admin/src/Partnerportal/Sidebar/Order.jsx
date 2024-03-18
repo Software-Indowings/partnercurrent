@@ -1,80 +1,109 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../features/userSlice";
 
-function Order() {
-  const dummyData = [
-    {
-      invoiceNumber: '202310-1-R-CH-173955',
-      deliveryDate: 'Oct. 16, 2023',
-      partnerName: 'PARAS JAIN',
-      grandTotal: '262.50',
-      currency: 'USD',
-      status: 'Paid',
-      notes: 'Educational Terms of Service apply',
-    },
-    {
-      invoiceNumber: '202310-1-R-CH-173237',
-      deliveryDate: 'Oct. 10, 2023',
-      partnerName: 'PARAS JAIN',
-      grandTotal: '562.50',
-      currency: 'USD',
-      status: 'Paid',
-      notes: 'Educational Terms of Service apply',
-    },
-    // Add more objects for other invoices
-  ];
+function Order(props) {
+  const [orders, setOrders] = useState([]);
+  const [error, setError] = useState(null);
+  const user = useSelector(selectUser);
 
   const containerStyle = {
-    margin: '30px',
+    margin: "30px",
   };
 
   const tableStyle = {
-    borderCollapse: 'collapse',
-    width: '1500px',
-    margin: 'auto',
-    backgroundColor: '#f5f5f5',
+    borderCollapse: "collapse",
+    width: "1500px",
+    margin: "auto",
+    backgroundColor: "#f5f5f5",
   };
 
   const thStyle = {
-    backgroundColor: '#191b30',
-    color: 'white',
-    textAlign: 'left',
-    padding: '29px',
-    border: '1px solid #dddddd',
+    backgroundColor: "#191b30",
+    color: "white",
+    textAlign: "left",
+    padding: "29px",
+    border: "1px solid #dddddd",
   };
 
   const tdStyle = {
-    textAlign: 'left',
-    padding: '20px',
-    border: '1px solid #dddddd',
+    textAlign: "left",
+    padding: "20px",
+    border: "1px solid #dddddd",
   };
+
+  useEffect(() => {
+    fetch("http://localhost:3307/allorders")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Response data:", data);
+        if (Array.isArray(data)) {
+          setOrders(data);
+          setError(null);
+        } else {
+          setError("The response from /allorders is not an array.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching orders:", error);
+        setError(
+          "An error occurred while fetching orders. Please try again later."
+        );
+      });
+  }, []);
 
   return (
     <div style={containerStyle}>
-      <h1 style={{ color: '#191b30' }}>Orders</h1>
+      <h1 style={{ color: "#191b30" }}>Orders List</h1>
       <table style={tableStyle}>
         <thead>
           <tr>
-            <th style={thStyle}>Invoice Number</th>
-            <th style={thStyle}>Delivery Date</th>
-            <th style={thStyle}>Partner Name</th>
-            <th style={thStyle}>Grand Total</th>
-            <th style={thStyle}>Currency</th>
+            <th style={thStyle}>Order ID</th>
+            <th style={thStyle}>Date</th>
+            <th style={thStyle}>Email</th>
+            <th style={thStyle}>Order Summary</th>
+            <th style={thStyle}> Grand Total </th>
             <th style={thStyle}>Status</th>
-            <th style={thStyle}>Notes</th>
+            <th style={thStyle}> Download Invoice </th>
           </tr>
         </thead>
         <tbody>
-          {dummyData.map((data, index) => (
-            <tr key={index}>
-              <td style={tdStyle}>{data.invoiceNumber}</td>
-              <td style={tdStyle}>{data.deliveryDate}</td>
-              <td style={tdStyle}>{data.partnerName}</td>
-              <td style={tdStyle}>{data.grandTotal}</td>
-              <td style={tdStyle}>{data.currency}</td>
-              <td style={tdStyle}>{data.status}</td>
-              <td style={tdStyle}>{data.notes}</td>
-            </tr>
-          ))}
+          {orders.map((order) => {
+            if (order.order_email === user.username) {
+              return (
+                <tr key={order.order_id}>
+                  <td style={tdStyle}>{order.order_id}</td>
+                  <td style={tdStyle}>{order.order_date}</td>
+                  <td style={tdStyle}>{order.order_email}</td>
+
+                  <td style={tdStyle}>
+                    <ul>
+                      {order.product && order.product.length > 0 ? (
+                        order.product.map((product, index) => (
+                          <li key={index}>
+                            {product.name} - Quantity: {product.count}
+                          </li>
+                        ))
+                      ) : (
+                        <li>No products found</li>
+                      )}
+                    </ul>
+                  </td>
+                  <td style={tdStyle}>{order.total_price}</td>
+                  <td style={tdStyle}>{order.order_status}</td>
+                  <td style={tdStyle}>Not Available</td>
+                </tr>
+              );
+            } else {
+              return null;
+            }
+          })}
         </tbody>
       </table>
     </div>

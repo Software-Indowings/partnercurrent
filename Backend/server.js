@@ -461,23 +461,30 @@ app.post('/api/targets', (req, res) => {
 //         return res.json(result);
 //     })
 // });
+
 app.get('/allorders', (req, res) => {
   db.query('SELECT * FROM orders', (error, results, fields) => {
     if (error) {
       console.error('Error fetching orders:', error);
       return res.status(500).json({ error: 'An error occurred while fetching orders' });
     }
-    console.log('Results:', results); 
-    const orders = results.map(row => {
-      row.product = JSON.parse(row.product);
-      return row;
-    });
-    const ordersJSON = JSON.stringify(orders); // Convert orders array to JSON string
-    res.setHeader('Content-Type', 'application/json');
-    res.send(ordersJSON); // Send the JSON string as response
+
+    try {
+      const orders = results.map(row => {
+        if (row.product) {
+          row.product = JSON.parse(row.product);
+        }
+        return row;
+      });
+
+      res.setHeader('Content-Type', 'application/json');
+      res.json(orders);
+    } catch (parseError) {
+      console.error('Error parsing JSON:', parseError);
+      res.status(500).json({ error: 'An error occurred while processing data' });
+    }
   });
 });
-
 
 
 app.post('/orders', (req, res) => {
@@ -497,6 +504,16 @@ app.post('/orders', (req, res) => {
       res.status(201).json({ message: 'Order placed successfully!', orderId: result.insertId });
     });
   });
+
+  
+app.put('/edistatus/:order_id', (req, res) => {
+  const sql = 'UPDATE orders SET `status`=? WHERE order_id =?';
+  const id = req.params.order_id;
+  db.query(sql,[req.body.status, id], (err,result)=>{
+      if(err) return res.json({Message: "Error in server"});
+      return res.json(result);
+  })
+});
   
 //   // Delete Legal Info by ID
 //   app.delete('/legal-info/:id', (req, res) => {

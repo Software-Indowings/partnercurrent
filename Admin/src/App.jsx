@@ -50,6 +50,7 @@ import Admin_profile from "./Partnerportal/Profile/Admin_profile";
 import ReadProfile from "./Partnerportal/Profile/Admin_readprofile";
 import LegalInfo from "./Components/LegalInfo/LegalInfo";
 import Create_Info from "./Components/LegalInfo/Create_Info";
+import EditStatus from "./Components/EditStatus";
 
 function App() {
   return (
@@ -135,6 +136,14 @@ function App() {
           element={
             <AdminProtectedRoute>
               <Update />
+            </AdminProtectedRoute>
+          }
+        />
+        <Route
+          path="/editstatus/:order_id"
+          element={
+            <AdminProtectedRoute>
+              <EditStatus />
             </AdminProtectedRoute>
           }
         />

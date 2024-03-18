@@ -58,7 +58,7 @@ function SelectedProductsModal({ selectedProducts, onClose }) {
     const orderData = {
       order_email: user.username, 
       order_date:  new Date().toISOString(),
-      order_status: 'pending', // Initial status of the order
+      order_status: '', // Initial status of the order
       product: selectedProducts,
       total_price: calculateTotal()
     };

@@ -104,7 +104,7 @@ function AdminPage() {
               Products
             </CardContent>
           </Card>
-          <Card
+          {/* <Card
             style={cardStyle}
             onMouseEnter={handleHover}
             onMouseLeave={handleHoverOut}
@@ -113,7 +113,7 @@ function AdminPage() {
             <CardContent style={{ ...textStyle, color: "black" }}>
               Invoices
             </CardContent>
-          </Card>
+          </Card> */}
           <Card
             style={cardStyle}
             onMouseEnter={handleHover}
