@@ -51,14 +51,17 @@ import ReadProfile from "./Partnerportal/Profile/Admin_readprofile";
 import LegalInfo from "./Components/LegalInfo/LegalInfo";
 import Create_Info from "./Components/LegalInfo/Create_Info";
 import EditStatus from "./Components/EditStatus";
-import Register from "./Partnerportal/Register";
+
+import HomePage from "./HomePage";
 
 function App() {
   return (
     // <RouterProvider router={router}/>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Loginpartner />} />
+        <Route path="/" element={<HomePage />} />
+        
+        <Route path="/portal" element={<Loginpartner />} />
         <Route path="/admin" element={<Login />} />
         <Route
           path="/adminPage"
@@ -216,7 +219,7 @@ function App() {
         <Route path="/docs" element={<Docs />} />
         <Route path="/announce" element={<Announce />} />
         <Route path="/support" element={<Support />} />
-        <Route path="/register" element={<Register />} />
+        {/* <Route path="/register" element={<Register />} /> */}
         <Route
           path="/create_products"
           element={
