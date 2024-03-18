@@ -88,6 +88,7 @@ app.post('/partner', (req, res) => {
     })
 });
 
+
 app.get('/read/:id', (req, res) => {
     const sql = 'SELECT * FROM partner WHERE id =?';
     const id = req.params.id;
@@ -504,6 +505,7 @@ app.post('/orders', (req, res) => {
       res.status(201).json({ message: 'Order placed successfully!', orderId: result.insertId });
     });
   });
+  
 
   
 app.put('/edistatus/:order_id', (req, res) => {

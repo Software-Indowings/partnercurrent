@@ -5,6 +5,7 @@ import background from "../images/3.png";
 function Orders(props) {
   const [orders, setOrders] = useState([]);
   const [error, setError] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState(""); // State to store selected status for each order
 
   useEffect(() => {
     fetch("http://localhost:3307/allorders")
@@ -30,6 +31,41 @@ function Orders(props) {
         );
       });
   }, []);
+
+  const handleStatusChange = (orderId) => {
+    // Ensure a status is selected
+    if (!selectedStatus) {
+      console.error("No status selected");
+      return;
+    }
+
+    // Write your logic here to update the order status
+    console.log("Order ID:", orderId);
+    console.log("New Status:", selectedStatus);
+
+    // Send a request to update the status of the specific order
+    fetch(`http://localhost:3307/updateOrderStatus/${orderId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ newStatus: selectedStatus }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to update status");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Status updated successfully:", data);
+        // You can update the local state or perform any necessary actions after updating the status
+      })
+      .catch((error) => {
+        console.error("Error updating status:", error);
+        // Handle error
+      });
+  };
 
   return (
     <div
@@ -64,10 +100,9 @@ function Orders(props) {
               <th>Email</th>
               <th>Date</th>
               <th>Products</th>
-              <th>Status</th>
               <th>Total Price</th>
-
               <th>Upload Invoice</th>
+              <th>Status</th>
               <th>Change Status</th>
             </tr>
           </thead>
@@ -91,16 +126,20 @@ function Orders(props) {
                     )}
                   </ul>
                 </td>
-                <td>{order.order_status}</td>
                 <td>{order.total_price}</td>
                 <td>upload invoice</td>
                 <td>
-                  {" "}
-                  <Link
-                    to={`/editstatus/${orders.order_id}`}
-                    className="btn btn-sm btn-info me-2">
-                    Status
-                  </Link>
+                  <select
+                    value={selectedStatus}
+                    onChange={(e) => setSelectedStatus(e.target.value)}
+                  >
+                    <option value="">Select Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="approved">Approved</option>
+                  </select>
+                </td>
+                <td>
+                  <button onClick={() => handleStatusChange(order.order_id)}>Update Status</button>
                 </td>
               </tr>
             ))}

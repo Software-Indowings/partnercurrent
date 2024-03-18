@@ -3,7 +3,6 @@ import axios from "axios";
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { login } from "../features/userSlice";
 import {
   MDBBtn,
   MDBContainer,
@@ -19,10 +18,12 @@ import img from "../images/2.png";
 import logo from "../images/partner.png";
 import backgroundImg from "../images/3.png";
 
-function LoginPartner() {
+function Register(props) {
+  
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
+    confirmPassword: ""
   });
   const [loginStatus, setLoginStatus] = useState(null);
   const navigate = useNavigate();
@@ -35,27 +36,20 @@ function LoginPartner() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (credentials.password !== credentials.confirmPassword) {
+      setLoginStatus("passwordMismatch");
+      return;
+    }
     try {
-      const res = await axios.post("http://localhost:3307/login/", credentials);
+      const res = await axios.post("http://localhost:3307/partner/", credentials);
       if (res.status === 200) {
-        const { username, password, category, commission } = res.data;
-        // console.log("-->", res.data);
-        dispatch(
-          login({
-            // Dispatch the login action with user information
-            username: username,
-            password: password,
-            category: category,
-            commission: commission,
-          })
-        );
         setLoginStatus("success");
-        navigate("/layout");
+        navigate("/");
       } else {
         setLoginStatus("failed");
       }
     } catch (error) {
-      console.error("Login failed:", error);
+      console.error("Registration failed:", error);
       setLoginStatus("failed");
     }
   };
@@ -109,7 +103,7 @@ function LoginPartner() {
                     color: "black",
                   }}
                 >
-                  Welcome Partner!
+                  Register here!
                 </h1>
                 {loginStatus === "success" && (
                   <p
@@ -119,7 +113,7 @@ function LoginPartner() {
                       fontFamily: "Arial, sans-serif",
                     }}
                   >
-                    Login Successful!
+                    Registration Successful! Please log in.
                   </p>
                 )}
                 {loginStatus === "failed" && (
@@ -130,7 +124,18 @@ function LoginPartner() {
                       fontFamily: "Arial, sans-serif",
                     }}
                   >
-                    Login Failed!
+                    Registration Failed!
+                  </p>
+                )}
+                {loginStatus === "passwordMismatch" && (
+                  <p
+                    style={{
+                      color: "red",
+                      fontSize: "24px",
+                      fontFamily: "Arial, sans-serif",
+                    }}
+                  >
+                    Passwords do not match.
                   </p>
                 )}
                 <br />
@@ -194,6 +199,35 @@ function LoginPartner() {
                       }}
                     />
                   </div>
+                  <div style={{ marginBottom: "20px" }}>
+                    <label
+                      style={{
+                        display: "block",
+                        marginBottom: "10px",
+                        fontSize: "19px",
+                        fontFamily: "Arial, sans-serif",
+                        color: "black",
+                      }}
+                      htmlFor="confirmPassword"
+                    >
+                      Confirm Password
+                    </label>
+                    <MDBInput
+                      wrapperClass="mb-4"
+                      id="confirmPassword"
+                      type="password"
+                      size="lg"
+                      name="confirmPassword"
+                      value={credentials.confirmPassword}
+                      onChange={handleInputChange}
+                      required
+                      style={{
+                        fontSize: "30px",
+                        fontFamily: "Arial, sans-serif",
+                        color: "black",
+                      }}
+                    />
+                  </div>
                   <MDBBtn
                     className="mb-4 px-5"
                     color="dark"
@@ -205,12 +239,8 @@ function LoginPartner() {
                       height: "50px",
                     }}
                   >
-                    Login
+                    Register
                   </MDBBtn>
-                  <br/>
-                  {/* <div >
-                   <Link to="/register" className='btn btn-primary me-2'>Register</Link>
-                  </div> */}
                 </form>
               </MDBCardBody>
             </MDBCol>
@@ -221,4 +251,4 @@ function LoginPartner() {
   );
 }
 
-export default LoginPartner;
+export default Register;

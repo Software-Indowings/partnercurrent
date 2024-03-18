@@ -113,9 +113,16 @@ function Target() {
                 <td style={tdStyle}>{monthData.month}</td>
                 <td style={tdStyle}>{monthData.from}</td>
                 <td style={tdStyle}>{monthData.to}</td>
-                <td style={tdStyle}>{monthData.target_amount}</td>
-                <td style={tdStyle}>{monthData.sales}</td>
-                <td style={tdStyle}>{monthData.targetAchieved}</td>
+                <td style={tdStyle}>
+                  10000
+                  {/* {monthData.target_amount} */}
+                  </td>
+                <td style={tdStyle}>4000
+                  {/* {monthData.sales} */}
+                  </td>
+                <td style={tdStyle}> 40%
+                  {/* {monthData.targetAchieved} */}
+                  </td>
               </tr>
             ))
           )}

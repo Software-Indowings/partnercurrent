@@ -51,6 +51,7 @@ import ReadProfile from "./Partnerportal/Profile/Admin_readprofile";
 import LegalInfo from "./Components/LegalInfo/LegalInfo";
 import Create_Info from "./Components/LegalInfo/Create_Info";
 import EditStatus from "./Components/EditStatus";
+import Register from "./Partnerportal/Register";
 
 function App() {
   return (
@@ -215,7 +216,7 @@ function App() {
         <Route path="/docs" element={<Docs />} />
         <Route path="/announce" element={<Announce />} />
         <Route path="/support" element={<Support />} />
-
+        <Route path="/register" element={<Register />} />
         <Route
           path="/create_products"
           element={
